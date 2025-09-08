@@ -1,0 +1,34 @@
+{
+  "name": "@uninspired/plunk-client",
+  "version": "0.0.1",
+  "author": "Christoph Kolb <chris@uninspired.studio>",
+  "license": "MIT",
+  "description": "JS client for the Plunk HTTP API",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "bun run scripts/build.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
