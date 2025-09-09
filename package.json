@@ -1,9 +1,21 @@
 {
   "name": "@uninspired/plunk-client",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Christoph Kolb <chris@uninspired.studio>",
   "license": "MIT",
+  "private": false,
+  "keywords": [
+    "plunk",
+    "client",
+    "http",
+    "email",
+    "typescript"
+  ],
   "description": "JS client for the Plunk HTTP API",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/UninspiredStudio/plunk-api-client.git"
+  },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",

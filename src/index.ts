@@ -395,3 +395,5 @@ export class PlunkApiClient {
 }
 
 export default PlunkApiClient;
+
+export type * from "./types";
