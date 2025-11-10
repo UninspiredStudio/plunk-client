@@ -288,15 +288,8 @@ export class PlunkApiClient {
     return data;
   };
 
-  #parsePrimitive = (value: string): string | number | boolean | Date => {
-    if (value === "true" || value === "false") return value === "true";
-    else if (!isNaN(Date.parse(value))) return new Date(value);
-    else if (!isNaN(Number(value))) return Number(value);
-    else return value;
-  };
-
   createContact = async <
-    Data extends Record<string, string> = Record<string, string>
+    Data extends Record<string, string> = Record<string, string>,
   >(
     req: CreateContactReq<Data>
   ): Promise<CreateContactResParsed<Data>> => {
@@ -343,7 +336,7 @@ export class PlunkApiClient {
   };
 
   updateContact = async <
-    Data extends Record<string, string> = Record<string, string>
+    Data extends Record<string, string> = Record<string, string>,
   >(
     req: UpdateContactReq<Data>
   ): Promise<UpdateContactResParsed<Data>> => {
@@ -368,13 +361,13 @@ export class PlunkApiClient {
   };
 
   deleteContact = async <
-    Data extends Record<string, string> = Record<string, string>
+    Data extends Record<string, string> = Record<string, string>,
   >(
     req: DeleteContactReq
   ): Promise<DeleteContactResParsed<Data>> => {
     const data = await this.#fetch<DeleteContactRes>(
-      "/v1/contacts/delete",
-      "POST",
+      "/v1/contacts",
+      "DELETE",
       req
     );
 
