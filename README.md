@@ -19,12 +19,12 @@ npm install @uninspired/plunk-client
 ### Initializing the client
 
 ```ts
-import { PlunkClient } from "@uninspired/plunk-client";
+import { PlunkApiClient } from "@uninspired/plunk-client";
 
 const PLUNK_BASE_URL = "https://api.useplunk.com"; // Can be changed for self-hosted Plunk
 const PLUNK_API_KEY = "your-api-key"; // Use your API secret key here
 
-const plunkClient = new PlunkClient(PLUNK_BASE_URL, PLUNK_API_KEY);
+const plunkApiClient = new PlunkApiClient(PLUNK_BASE_URL, PLUNK_API_KEY);
 ```
 
 ### Automations
@@ -32,7 +32,7 @@ const plunkClient = new PlunkClient(PLUNK_BASE_URL, PLUNK_API_KEY);
 #### Track an event
 
 ```ts
-const res = await plunkClient.trackEvent({
+const res = await plunkApiClient.trackEvent({
   event: "[EVENT_ID]",
   email: "user@example.com",
   subscribed: true,
@@ -51,7 +51,7 @@ You can provide attachments to the email by providing an array of JavaScript `Fi
 ```ts
 const attachment = new File([], "test.txt");
 
-const res = await plunkClient.sendEmail({
+const res = await plunkApiClient.sendEmail({
   to: "user@example.com",
   subject: "Hello",
   body: "Hello, this is a test email.",
@@ -71,7 +71,7 @@ const res = await plunkClient.sendEmail({
 #### Create a campaign
 
 ```ts
-const res = await plunkClient.createCampaign({
+const res = await plunkApiClient.createCampaign({
   subject: "Hello",
   body: "Hello, this is a test email.",
   recipients: ["user@example.com"],
@@ -82,7 +82,7 @@ const res = await plunkClient.createCampaign({
 #### Send a campaign
 
 ```ts
-const res = await plunkClient.sendCampaign("[CAMPAIGN_ID]", {
+const res = await plunkApiClient.sendCampaign("[CAMPAIGN_ID]", {
   live: true, // Should the campaign be sent to the recipients
   delay: 5, // in minutes
 });
@@ -91,7 +91,7 @@ const res = await plunkClient.sendCampaign("[CAMPAIGN_ID]", {
 #### Update a campaign
 
 ```ts
-const res = await plunkClient.updateCampaign("[CAMPAIGN_ID]", {
+const res = await plunkApiClient.updateCampaign("[CAMPAIGN_ID]", {
   subject: "Hello",
   body: "Hello, this is a test email.",
   recipients: ["user@example.com"],
@@ -102,7 +102,7 @@ const res = await plunkClient.updateCampaign("[CAMPAIGN_ID]", {
 #### Delete a campaign
 
 ```ts
-const res = await plunkClient.deleteCampaign("[CAMPAIGN_ID]");
+const res = await plunkApiClient.deleteCampaign("[CAMPAIGN_ID]");
 ```
 
 ### Contacts
@@ -114,7 +114,7 @@ interface ContactData {
   foo: string;
 }
 
-const res = await plunkClient.getContactById<ContactData>("[CONTACT_ID]");
+const res = await plunkApiClient.getContactById<ContactData>("[CONTACT_ID]");
 ```
 
 #### Get all contacts
@@ -124,13 +124,13 @@ interface ContactData {
   foo: string;
 }
 
-const res = await plunkClient.getAllContacts<ContactData>();
+const res = await plunkApiClient.getAllContacts<ContactData>();
 ```
 
 #### Get number of contacts
 
 ```ts
-const res = await plunkClient.getNumberOfContacts();
+const res = await plunkApiClient.getNumberOfContacts();
 ```
 
 #### Create a contact
@@ -140,7 +140,7 @@ interface ContactData {
   foo: string;
 }
 
-const res = await plunkClient.createContact<ContactData>({
+const res = await plunkApiClient.createContact<ContactData>({
   email: "user@example.com",
   subscribed: true,
   data: {
@@ -153,20 +153,24 @@ const res = await plunkClient.createContact<ContactData>({
 
 ```ts
 // Subscribe contact by ID
-const res = await plunkClient.subscribeContact({ id: "[CONTACT_ID]" });
+const res = await plunkApiClient.subscribeContact({ id: "[CONTACT_ID]" });
 
 // Subscribe contact by email
-const res = await plunkClient.subscribeContact({ email: "user@example.com" });
+const res = await plunkApiClient.subscribeContact({
+  email: "user@example.com",
+});
 ```
 
 #### Unsubscribe a contact
 
 ```ts
 // Unsubscribe contact by ID
-const res = await plunkClient.unsubscribeContact({ id: "[CONTACT_ID]" });
+const res = await plunkApiClient.unsubscribeContact({ id: "[CONTACT_ID]" });
 
 // Unsubscribe contact by email
-const res = await plunkClient.unsubscribeContact({ email: "user@example.com" });
+const res = await plunkApiClient.unsubscribeContact({
+  email: "user@example.com",
+});
 ```
 
 #### Update a contact
@@ -176,7 +180,7 @@ interface ContactData {
   foo: string;
 }
 
-const res = await plunkClient.updateContact<ContactData>({
+const res = await plunkApiClient.updateContact<ContactData>({
   id: "[CONTACT_ID]",
   data: { foo: "bar" },
 });
@@ -185,7 +189,7 @@ const res = await plunkClient.updateContact<ContactData>({
 #### Delete a contact
 
 ```ts
-const res = await plunkClient.deleteContact("[CONTACT_ID]");
+const res = await plunkApiClient.deleteContact("[CONTACT_ID]");
 ```
 
 ## Features
@@ -202,7 +206,7 @@ interface ContactData {
   bar?: string;
 }
 
-const res = await plunkClient.getContactById<ContactData>("[CONTACT_ID]");
+const res = await plunkApiClient.getContactById<ContactData>("[CONTACT_ID]");
 
 // res.data will be of type ContactData
 ```
@@ -214,7 +218,7 @@ interface ContactData {
   foo: string;
 }
 
-const res = await plunkClient.trackEvent<ContactData>({
+const res = await plunkApiClient.trackEvent<ContactData>({
   event: "[EVENT_ID]",
   email: "user@example.com",
   data: {

@@ -72,7 +72,13 @@ export class PlunkApiClient {
     if (!res.ok) {
       throw new Error(`${res.status} ${res.statusText}`);
     }
-    return (await res.json()) as Response;
+    let data;
+    if (res.headers.get("Content-Type") === "application/json") {
+      data = await res.json();
+    } else {
+      data = await res.text();
+    }
+    return data as Response;
   };
 
   #fileToBase64 = async (file: File) => {
