@@ -12,7 +12,7 @@ export interface EmailObject {
   };
 }
 
-export interface TrackEventReq<Data extends Record<string, string>> {
+export interface TrackEventReq<Data = any> {
   event: string;
   email: string;
   subscribed?: boolean;
@@ -24,10 +24,6 @@ export interface TrackEventRes {
   contact: string;
   event: string;
   timestamp: string;
-}
-
-export interface TrackEventResParsed extends Omit<TrackEventRes, "timestamp"> {
-  timestamp: Date;
 }
 
 export interface SendEmailReq {
@@ -52,10 +48,6 @@ export interface SendEmailRes {
   timestamp: string;
 }
 
-export interface SendEmailResParsed extends Omit<SendEmailRes, "timestamp"> {
-  timestamp: Date;
-}
-
 export interface CreateCampaignReq {
   subject: string;
   body: string;
@@ -73,12 +65,6 @@ export interface CreateCampaignRes {
   projectId: string;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface CreateCampaignResParsed
-  extends Omit<CreateCampaignRes, "createdAt" | "updatedAt"> {
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface SendCampaignReq {
@@ -109,12 +95,6 @@ export interface UpdateCampaignRes {
   updatedAt: string;
 }
 
-export interface UpdateCampaignResParsed
-  extends Omit<UpdateCampaignRes, "createdAt" | "updatedAt"> {
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export interface DeleteCampaignReq {
   id: string;
 }
@@ -131,12 +111,6 @@ export interface DeleteCampaignRes {
   updatedAt: string;
 }
 
-export interface DeleteCampaignResParsed
-  extends Omit<DeleteCampaignRes, "createdAt" | "updatedAt"> {
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export interface Action {}
 
 export interface Event {
@@ -145,11 +119,6 @@ export interface Event {
   templateId: string | null;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface EventParsed extends Omit<Event, "createdAt" | "updatedAt"> {
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface Trigger {
@@ -161,13 +130,6 @@ export interface Trigger {
   updatedAt: string;
   event: Event;
   action: Action | null;
-}
-
-export interface TriggerParsed
-  extends Omit<Trigger, "createdAt" | "updatedAt" | "event"> {
-  createdAt: Date;
-  updatedAt: Date;
-  event: EventParsed;
 }
 
 export interface ContactEmail {
@@ -183,17 +145,11 @@ export interface ContactEmail {
   updatedAt: string;
 }
 
-export interface ContactEmailParsed
-  extends Omit<ContactEmail, "createdAt" | "updatedAt"> {
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export interface GetContactByIdRes {
   id: string;
-  emaiL: string;
+  email: string;
   subscribed: boolean;
-  data: string;
+  data: Data;
   projectId: string;
   createdAt: string;
   updatedAt: string;
@@ -201,15 +157,8 @@ export interface GetContactByIdRes {
   emails: ContactEmail[];
 }
 
-export interface GetContactByIdResParsed<Data extends Record<string, string>>
-  extends Omit<
-    GetContactByIdRes,
-    "createdAt" | "updatedAt" | "triggers" | "emails" | "data"
-  > {
-  createdAt: Date;
-  updatedAt: Date;
-  triggers: TriggerParsed[];
-  emails: ContactEmailParsed[];
+export interface GetContactByIdResParsed<Data = any>
+  extends Omit<GetContactByIdRes, "data"> {
   data: Data;
 }
 
@@ -222,24 +171,21 @@ export interface GetAllContactsContact {
   updatedAt: string;
 }
 
-export interface GetAllContactsContactParsed<
-  Data extends Record<string, string>
-> extends Omit<GetAllContactsContact, "createdAt" | "updatedAt" | "data"> {
-  createdAt: Date;
-  updatedAt: Date;
+export interface GetAllContactsContactParsed<Data = any>
+  extends Omit<GetAllContactsContact, "data"> {
   data: Data;
 }
 
 export type GetAllContactsRes = GetAllContactsContact[];
 
-export type GetAllContactsResParsed<Data extends Record<string, string>> =
+export type GetAllContactsResParsed<Data = any> =
   GetAllContactsContactParsed<Data>[];
 
 export interface GetNumberOfContactsRes {
   count: number;
 }
 
-export interface CreateContactReq<Data extends Record<string, string>> {
+export interface CreateContactReq<Data = any> {
   email: string;
   subscribed: boolean;
   data: Data;
@@ -255,11 +201,9 @@ export interface CreateContactRes {
   updatedAt: string;
 }
 
-export interface CreateContactResParsed<Data extends Record<string, string>>
-  extends Omit<CreateContactRes, "createdAt" | "updatedAt" | "data"> {
+export interface CreateContactResParsed<Data = any>
+  extends Omit<CreateContactRes, "data"> {
   data: Data;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface SubscribeContactReqId {
@@ -306,7 +250,7 @@ export interface UpdateContactReqEmail {
   email: string;
 }
 
-export type UpdateContactReq<Data extends Record<string, string>> = (
+export type UpdateContactReq<Data = any> = (
   | UpdateContactReqId
   | UpdateContactReqEmail
 ) & {
@@ -324,10 +268,8 @@ export interface UpdateContactRes {
   updatedAt: string;
 }
 
-export interface UpdateContactResParsed<Data extends Record<string, string>>
-  extends Omit<UpdateContactRes, "createdAt" | "updatedAt" | "data"> {
-  createdAt: Date;
-  updatedAt: Date;
+export interface UpdateContactResParsed<Data = any>
+  extends Omit<UpdateContactRes, "data"> {
   data: Data;
 }
 
@@ -345,9 +287,7 @@ export interface DeleteContactRes {
   updatedAt: string;
 }
 
-export interface DeleteContactResParsed<Data extends Record<string, string>>
-  extends Omit<DeleteContactRes, "createdAt" | "updatedAt" | "data"> {
-  createdAt: Date;
-  updatedAt: Date;
+export interface DeleteContactResParsed<Data = any>
+  extends Omit<DeleteContactRes, "data"> {
   data: Data;
 }

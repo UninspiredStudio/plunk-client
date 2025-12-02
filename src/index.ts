@@ -1,21 +1,15 @@
 import type {
   Attachment,
-  ContactEmail,
-  ContactEmailParsed,
   CreateCampaignReq,
   CreateCampaignRes,
-  CreateCampaignResParsed,
   CreateContactReq,
   CreateContactRes,
   CreateContactResParsed,
   DeleteCampaignReq,
   DeleteCampaignRes,
-  DeleteCampaignResParsed,
   DeleteContactReq,
   DeleteContactRes,
   DeleteContactResParsed,
-  Event,
-  EventParsed,
   GetAllContactsRes,
   GetAllContactsResParsed,
   GetContactByIdRes,
@@ -26,19 +20,14 @@ import type {
   SendEmailReq,
   SendEmailReqParsed,
   SendEmailRes,
-  SendEmailResParsed,
   SubscribeContactReq,
   SubscribeContactRes,
   TrackEventReq,
   TrackEventRes,
-  TrackEventResParsed,
-  Trigger,
-  TriggerParsed,
   UnsubscribeContactReq,
   UnsubscribeContactRes,
   UpdateCampaignReq,
   UpdateCampaignRes,
-  UpdateCampaignResParsed,
   UpdateContactReq,
   UpdateContactRes,
   UpdateContactResParsed,
@@ -102,59 +91,18 @@ export class PlunkApiClient {
     return attachments;
   };
 
-  #parseEvent = (event: Event): EventParsed => {
-    const createdAtNum = Date.parse(event.createdAt);
-    if (isNaN(createdAtNum)) throw new Error("createdAt could not be parsed");
-    const createdAt = new Date(createdAtNum);
-    const updatedAtNum = Date.parse(event.updatedAt);
-    if (isNaN(updatedAtNum)) throw new Error("updatedAt could not be parsed");
-    const updatedAt = new Date(updatedAtNum);
-
-    return { ...event, createdAt, updatedAt };
-  };
-
-  #parseTrigger = (trigger: Trigger): TriggerParsed => {
-    const createdAtNum = Date.parse(trigger.createdAt);
-    if (isNaN(createdAtNum)) throw new Error("createdAt could not be parsed");
-    const createdAt = new Date(createdAtNum);
-    const updatedAtNum = Date.parse(trigger.updatedAt);
-    if (isNaN(updatedAtNum)) throw new Error("updatedAt could not be parsed");
-    const updatedAt = new Date(updatedAtNum);
-
-    return {
-      ...trigger,
-      createdAt,
-      updatedAt,
-      event: this.#parseEvent(trigger.event),
-    };
-  };
-
-  #parseContactEmail = (contactEmail: ContactEmail): ContactEmailParsed => {
-    const createdAtNum = Date.parse(contactEmail.createdAt);
-    if (isNaN(createdAtNum)) throw new Error("createdAt could not be parsed");
-    const createdAt = new Date(createdAtNum);
-    const updatedAtNum = Date.parse(contactEmail.updatedAt);
-    if (isNaN(updatedAtNum)) throw new Error("updatedAt could not be parsed");
-    const updatedAt = new Date(updatedAtNum);
-
-    return { ...contactEmail, createdAt, updatedAt };
-  };
-
   trackEvent = async <Data extends Record<string, string>>(
     req: TrackEventReq<Data>
-  ): Promise<TrackEventResParsed> => {
+  ): Promise<TrackEventRes> => {
     const data = await this.#fetch<TrackEventRes, TrackEventReq<Data>>(
       "/v1/track",
       "POST",
       req
     );
-    const timestampNum = Date.parse(data.timestamp);
-    if (isNaN(timestampNum)) throw new Error("timestamp could not be parsed");
-    const timestamp = new Date(timestampNum);
-    return { ...data, timestamp };
+    return data;
   };
 
-  sendEmail = async (req: SendEmailReq): Promise<SendEmailResParsed> => {
+  sendEmail = async (req: SendEmailReq): Promise<SendEmailRes> => {
     const data = await this.#fetch<SendEmailRes, SendEmailReqParsed>(
       "/v1/send",
       "POST",
@@ -165,10 +113,7 @@ export class PlunkApiClient {
           : undefined,
       }
     );
-    const timestampNum = Date.parse(data.timestamp);
-    if (isNaN(timestampNum)) throw new Error("timestamp could not be parsed");
-    const timestamp = new Date(timestampNum);
-    return { ...data, timestamp };
+    return data;
   };
 
   sendCampaign = async (
@@ -188,25 +133,19 @@ export class PlunkApiClient {
 
   createCampaign = async (
     req: CreateCampaignReq
-  ): Promise<CreateCampaignResParsed> => {
+  ): Promise<CreateCampaignRes> => {
     const data = await this.#fetch<CreateCampaignRes, CreateCampaignReq>(
       "/v1/campaigns",
       "POST",
       req
     );
-    const createdAtNum = Date.parse(data.createdAt);
-    if (isNaN(createdAtNum)) throw new Error("createdAt could not be parsed");
-    const createdAt = new Date(createdAtNum);
-    const updatedAtNum = Date.parse(data.updatedAt);
-    if (isNaN(updatedAtNum)) throw new Error("updatedAt could not be parsed");
-    const updatedAt = new Date(updatedAtNum);
-    return { ...data, createdAt, updatedAt };
+    return data;
   };
 
   updateCampaign = async (
     id: UpdateCampaignReq["id"],
     body: Omit<UpdateCampaignReq, "id">
-  ): Promise<UpdateCampaignResParsed> => {
+  ): Promise<UpdateCampaignRes> => {
     const data = await this.#fetch<UpdateCampaignRes, UpdateCampaignReq>(
       `/v1/campaigns`,
       "PUT",
@@ -215,30 +154,18 @@ export class PlunkApiClient {
         ...body,
       }
     );
-    const createdAtNum = Date.parse(data.createdAt);
-    if (isNaN(createdAtNum)) throw new Error("createdAt could not be parsed");
-    const createdAt = new Date(createdAtNum);
-    const updatedAtNum = Date.parse(data.updatedAt);
-    if (isNaN(updatedAtNum)) throw new Error("updatedAt could not be parsed");
-    const updatedAt = new Date(updatedAtNum);
-    return { ...data, createdAt, updatedAt };
+    return data;
   };
 
   deleteCampaign = async (
     id: DeleteCampaignReq["id"]
-  ): Promise<DeleteCampaignResParsed> => {
+  ): Promise<DeleteCampaignRes> => {
     const data = await this.#fetch<DeleteCampaignRes, DeleteCampaignReq>(
       `/v1/campaigns/${id}`,
       "DELETE",
       { id }
     );
-    const createdAtNum = Date.parse(data.createdAt);
-    if (isNaN(createdAtNum)) throw new Error("createdAt could not be parsed");
-    const createdAt = new Date(createdAtNum);
-    const updatedAtNum = Date.parse(data.updatedAt);
-    if (isNaN(updatedAtNum)) throw new Error("updatedAt could not be parsed");
-    const updatedAt = new Date(updatedAtNum);
-    return { ...data, createdAt, updatedAt };
+    return data;
   };
 
   getContactById = async <Data extends Record<string, string>>(
@@ -248,19 +175,9 @@ export class PlunkApiClient {
       `/v1/contacts/${id}`,
       "GET"
     );
-    const createdAtNum = Date.parse(data.createdAt);
-    if (isNaN(createdAtNum)) throw new Error("createdAt could not be parsed");
-    const createdAt = new Date(createdAtNum);
-    const updatedAtNum = Date.parse(data.updatedAt);
-    if (isNaN(updatedAtNum)) throw new Error("updatedAt could not be parsed");
-    const updatedAt = new Date(updatedAtNum);
     return {
       ...data,
-      createdAt,
-      updatedAt,
       data: JSON.parse(data.data),
-      triggers: data.triggers.map(this.#parseTrigger),
-      emails: data.emails.map(this.#parseContactEmail),
     };
   };
 
@@ -269,18 +186,8 @@ export class PlunkApiClient {
   > => {
     const data = await this.#fetch<GetAllContactsRes>("/v1/contacts", "GET");
     return data.map((contact) => {
-      const createdAtNum = Date.parse(contact.createdAt);
-      if (isNaN(createdAtNum)) throw new Error("createdAt could not be parsed");
-      const createdAt = new Date(createdAtNum);
-
-      const updatedAtNum = Date.parse(contact.updatedAt);
-      if (isNaN(updatedAtNum)) throw new Error("updatedAt could not be parsed");
-      const updatedAt = new Date(updatedAtNum);
-
       return {
         ...contact,
-        createdAt,
-        updatedAt,
         data: JSON.parse(contact.data) as Data,
       };
     });
@@ -304,17 +211,9 @@ export class PlunkApiClient {
       "POST",
       req
     );
-    const createdAtNum = Date.parse(data.createdAt);
-    if (isNaN(createdAtNum)) throw new Error("createdAt could not be parsed");
-    const createdAt = new Date(createdAtNum);
-    const updatedAtNum = Date.parse(data.updatedAt);
-    if (isNaN(updatedAtNum)) throw new Error("updatedAt could not be parsed");
-    const updatedAt = new Date(updatedAtNum);
 
     return {
       ...data,
-      createdAt,
-      updatedAt,
       data: JSON.parse(data.data) as Data,
     };
   };
@@ -351,17 +250,9 @@ export class PlunkApiClient {
       "PUT",
       req
     );
-    const createdAtNum = Date.parse(data.createdAt);
-    const updatedAtNum = Date.parse(data.updatedAt);
-    if (isNaN(createdAtNum)) throw new Error("createdAt could not be parsed");
-    if (isNaN(updatedAtNum)) throw new Error("updatedAt could not be parsed");
-    const createdAt = new Date(createdAtNum);
-    const updatedAt = new Date(updatedAtNum);
 
     return {
       ...data,
-      createdAt,
-      updatedAt,
       data: JSON.parse(data.data) as Data,
     };
   };
@@ -377,17 +268,8 @@ export class PlunkApiClient {
       req
     );
 
-    const createdAtNum = Date.parse(data.createdAt);
-    if (isNaN(createdAtNum)) throw new Error("createdAt could not be parsed");
-    const createdAt = new Date(createdAtNum);
-    const updatedAtNum = Date.parse(data.updatedAt);
-    if (isNaN(updatedAtNum)) throw new Error("updatedAt could not be parsed");
-    const updatedAt = new Date(updatedAtNum);
-
     return {
       ...data,
-      createdAt,
-      updatedAt,
       data: JSON.parse(data.data) as Data,
     };
   };
