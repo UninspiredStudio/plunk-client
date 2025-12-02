@@ -149,7 +149,7 @@ export interface GetContactByIdRes {
   id: string;
   email: string;
   subscribed: boolean;
-  data: Data;
+  data: string;
   projectId: string;
   createdAt: string;
   updatedAt: string;

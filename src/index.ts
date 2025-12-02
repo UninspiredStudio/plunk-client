@@ -62,7 +62,7 @@ export class PlunkApiClient {
       throw new Error(`${res.status} ${res.statusText}`);
     }
     let data;
-    if (res.headers.get("Content-Type") === "application/json") {
+    if (res.headers.get("Content-Type")?.startsWith("application/json")) {
       data = await res.json();
     } else {
       data = await res.text();
